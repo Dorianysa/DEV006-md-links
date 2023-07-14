@@ -78,4 +78,42 @@ describe('mdLinks', () => {
         expect(error.code).toBe('ENOENT');
       });
   });
+
+  it('should return an array of links with validation for all .md files into directory  ', () => {
+    const pathFile = path.resolve('./test/files/test.md');
+    const pathFile2 = path.resolve('./test/files/test2.md');
+    return mdLinks('./test/files/', { validate: true })
+      .then(links => {
+        expect(links).toEqual([
+          {
+            href: 'https://github.com',
+            text: 'GitHub',
+            file: pathFile,
+            status: 200,
+            ok: 'ok'
+          },
+          {
+            href: 'https://google.com',
+            text: 'Google',
+            file: pathFile,
+            status: 200,
+            ok: 'ok'
+          },
+          {
+            href: 'http://www.facebook.com',
+            text: 'Facebook',
+            file: pathFile,
+            status: 200,
+            ok: 'ok'
+          },
+          {
+            href: 'https://link-roto.com',
+            text: 'Link Roto',
+            file: pathFile2,
+            status: 404,
+            ok: 'fail'
+          }
+        ]);
+      });
+  });
 });
